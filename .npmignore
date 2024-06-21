@@ -1,0 +1,8 @@
+examples
+.github
+ava.config.js
+build.js
+tsconfig.json
+src
+.env
+.npmrc

@@ -1,0 +1,62 @@
+{
+  "name": "@faable/next-content",
+  "version": "0.0.0-develop",
+  "license": "UNLICENSED",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "module": "dist/index.mjs",
+  "repository": "https://github.com/faablecloud/next-content",
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "clean": "rimraf dist",
+    "prebuild": "yarn run clean",
+    "build": "tsc --project tsconfig.production.json",
+    "pretest": "tsc",
+    "test": "ava",
+    "prepack": "yarn build",
+    "release": "semantic-release"
+  },
+  "devDependencies": {
+    "@ava/typescript": "^5.0.0",
+    "@changesets/cli": "^2.24.4",
+    "@types/node": "^18.7.16",
+    "@types/qs": "^6.9.11",
+    "@types/react": "^18.0.18",
+    "ava": "^6.0.0",
+    "dotenv": "^16.0.3",
+    "esbuild": "^0.15.7",
+    "esbuild-node-externals": "^1.5.0",
+    "next": "^13.1.6",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "rimraf": "^3.0.2",
+    "semantic-release": "^20.1.0",
+    "typescript": "^5.4.5"
+  },
+  "peerDependencies": {
+    "next": "^12.3.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "dependencies": {
+    "@faable/auth-helpers-axios": "^1.0.3",
+    "axios": "^1.7.2",
+    "jwt-decode": "^4.0.0",
+    "mdx-bundler": "^9.0.1",
+    "qs": "^6.11.2"
+  },
+  "files": [
+    "dist"
+  ],
+  "release": {
+    "branches": "main",
+    "plugins": [
+      "@semantic-release/commit-analyzer",
+      "@semantic-release/release-notes-generator",
+      "@semantic-release/npm",
+      "@semantic-release/github"
+    ]
+  }
+}
