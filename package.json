@@ -5,7 +5,7 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "module": "dist/index.mjs",
-  "repository": "https://github.com/faablecloud/next-content",
+  "repository": "https://github.com/faablecloud/content-nextjs",
   "publishConfig": {
     "access": "public"
   },
