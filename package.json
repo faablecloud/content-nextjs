@@ -1,5 +1,5 @@
 {
-  "name": "@faable/next-content",
+  "name": "@faable/content-nextjs",
   "version": "0.0.0-develop",
   "license": "UNLICENSED",
   "main": "dist/index.js",
