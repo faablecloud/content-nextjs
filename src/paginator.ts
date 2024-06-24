@@ -5,6 +5,11 @@ export interface Page<T> {
   results: T[];
 }
 
+export interface PageQueryParams {
+  cursor?: string;
+  pageSize?: number;
+}
+
 export class FaablePaginator {
   constructor(public client: AxiosInstance) {}
   paginate<T>(req: AxiosRequestConfig) {
@@ -23,10 +28,10 @@ export class FaablePaginator {
         } while (res.data.next);
         return pages.map((page) => page.results).flat();
       },
-      page: async (next?: string) => {
+      page: async (pageParams: PageQueryParams = {}) => {
         const res = await this.client.request<Page<T>>({
           ...req,
-          params: { ...req.params, next },
+          params: { ...req.params, ...pageParams },
         });
         return res.data;
       },

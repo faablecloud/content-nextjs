@@ -2,15 +2,11 @@ import { AxiosInstance, AxiosResponse } from "axios";
 import { authorize } from "@faable/auth-helpers-axios";
 import axios from "axios";
 import { FaablePaginator } from "./paginator";
+
 export interface Content {
   id: string;
   status: "private" | "public";
   data: string;
-}
-
-export interface PageQueryParams {
-  cursor?: string;
-  pageSize?: number;
 }
 
 const handleResponse = async <T>(prom: Promise<AxiosResponse<T>>) => {
@@ -24,7 +20,7 @@ export type ContentListQueryParams = {
   context_content_id?: string;
   status?: "public" | "private";
   categories?: string[];
-} & PageQueryParams;
+};
 
 interface ContentApiOptions {
   client: AxiosInstance;
