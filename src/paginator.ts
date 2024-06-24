@@ -1,6 +1,6 @@
 import { AxiosInstance, AxiosRequestConfig, AxiosResponse } from "axios";
 
-interface Page<T> {
+export interface Page<T> {
   next: string | null;
   results: T[];
 }
@@ -22,6 +22,13 @@ export class FaablePaginator {
           pages.push(res.data);
         } while (res.data.next);
         return pages.map((page) => page.results).flat();
+      },
+      page: async (next?: string) => {
+        const res = await this.client.request<Page<T>>({
+          ...req,
+          params: { ...req.params, next },
+        });
+        return res.data;
       },
     };
   }

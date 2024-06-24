@@ -13,11 +13,6 @@ export interface PageQueryParams {
   pageSize?: number;
 }
 
-export interface Page<T> {
-  next: string | null;
-  results: T[];
-}
-
 const handleResponse = async <T>(prom: Promise<AxiosResponse<T>>) => {
   const res = await prom;
   return res.data;
