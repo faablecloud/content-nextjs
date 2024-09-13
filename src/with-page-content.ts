@@ -1,6 +1,7 @@
 import { GetServerSideProps } from "next";
 import { AxiosError } from "axios";
 import { ContentApi } from "./ContentApi";
+import Keyv from "@keyvhq/core";
 
 export type WithPageContentConfig = {
   api?: ContentApi;
@@ -16,6 +17,8 @@ export const withPageContent = (config: WithPageContentConfig = {}) => {
     api = new ContentApi({ box: config.box });
   }
 
+  const cache = new Keyv();
+
   return (
       getServerSideProps?: GetServerSideProps
     ): GetServerSideProps<any, { slug: string }> =>
@@ -27,8 +30,8 @@ export const withPageContent = (config: WithPageContentConfig = {}) => {
       }
 
       let {
-        maxAge = 86400,
-        staleWhileRevalidate = 7200,
+        maxAge = 3600,
+        staleWhileRevalidate = 3600,
         disableCache = false,
       } = config;
 
@@ -61,12 +64,9 @@ export const withPageContent = (config: WithPageContentConfig = {}) => {
         ret.props = { ...ret.props, content };
 
         if (!disableCache) {
-          // 1 hour in client
-          // 24 hour in Fastly
-          // Revalidate every 2 hours if possible
           ctx.res.setHeader(
             "Cache-Control",
-            `public, s-maxage=${maxAge}, stale-while-revalidate=${staleWhileRevalidate}`
+            `public, max-age=${maxAge}, s-maxage=${maxAge}, stale-while-revalidate=${staleWhileRevalidate}, must-revalidate`
           );
         }
         return ret;
