@@ -35,10 +35,10 @@ export const withPageBox = (config: WithPageBoxConfig) => {
         // 1 hour in client
         // 24 hour in Fastly
         // Revalidate every 2 hours
-        ctx.res.setHeader(
-          "Cache-Control",
-          "public, s-maxage=3600, stale-while-revalidate=1800"
-        );
+        // ctx.res.setHeader(
+        //   "Cache-Control",
+        //   "public, s-maxage=3600, stale-while-revalidate=1800"
+        // );
         return {
           ...ret,
           props: {

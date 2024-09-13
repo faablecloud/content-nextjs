@@ -6,9 +6,8 @@ import Keyv from "@keyvhq/core";
 export type WithPageContentConfig = {
   api?: ContentApi;
   box?: string;
-  maxAge?: number;
   disableCache?: boolean;
-  staleWhileRevalidate?: number;
+
   forceDevelopmentCache?: boolean;
 };
 
@@ -50,11 +49,7 @@ export const withPageContent = (config: WithPageContentConfig = {}) => {
         ret = await getServerSideProps(ctx);
       }
 
-      let {
-        maxAge = 3600,
-        staleWhileRevalidate = 3600,
-        disableCache = false,
-      } = config;
+      let { disableCache = false } = config;
 
       const slug = ctx.params?.slug;
       if (!slug) {
