@@ -25,7 +25,7 @@ export const withPageContent = (config: WithPageContentConfig = {}) => {
     process.env.NODE_ENV == "production" || config.forceDevelopmentCache;
   const cache = new Keyv({
     ttl: 1000 * 60 * 30,
-    namespace: "faable-content-cache",
+    namespace: `faable-content-cache:${config?.box}`,
   });
 
   const contentFetch = async (slug: string) => {
