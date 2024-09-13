@@ -1,10 +1,9 @@
-import { withPageContent } from "@core-school/next-content";
+import { withPageContent } from "@faable/content-nextjs";
 import { GetServerSideProps } from "next";
 import Link from "next/link";
 
 const Page = (props) => {
-  const { content, other } = props;
-
+  const { content, box, other } = props;
   return (
     <div>
       <h1>Content</h1>
@@ -14,6 +13,19 @@ const Page = (props) => {
       <div>
         <b>Authors:</b> {content.authors.join(",")}
       </div>
+
+      {/* <div>
+        <h2>Context</h2>
+        <ul>
+          {box.results.map((e) => (
+            <li key={e.id}>
+              {e.title} · <Link href={`/blog/${e.slug}`}>Entry</Link> ·{" "}
+              <Link href={`/context/${e.slug}`}>Context</Link>
+            </li>
+          ))}
+        </ul>
+      </div> */}
+
       <div style={{ marginTop: 20 }}>
         <Link href="/">Go to list</Link>
       </div>

@@ -4,13 +4,15 @@
   "main": "index.js",
   "license": "MIT",
   "dependencies": {
-    "@core-school/next-content": "file:../..",
+    "@faable/content-nextjs": "file:../..",
     "next": "^13.1.6",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },
   "scripts": {
-    "dev": "next dev"
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start"
   },
   "devDependencies": {
     "@types/node": "18.11.18",

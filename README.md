@@ -1,7 +1,5 @@
-```bash
-npm i @core-school/next-content
-```
+## Install
 
 ```bash
-yarn add @core-school/next-content
+npm i @faable/content-nextjs
 ```
