@@ -1,16 +1,15 @@
-import { Content, withPageBox } from "@faable/content-nextjs";
+import Link from "next/link";
+import { content_client, FAABLE_CACHE_HEADER } from "../lib/content";
 import { GetServerSideProps } from "next";
 
-import Link from "next/link";
-
 const Page = (props) => {
-  const { box, other } = props;
+  const { data, other } = props;
 
   return (
     <div>
       <h1>Content List</h1>
       <ul>
-        {box.map((e) => (
+        {data.map((e) => (
           <li key={e.id}>
             <span style={{ color: e.status == "private" ? "red" : "black" }}>
               {e.title}
@@ -34,12 +33,12 @@ const Page = (props) => {
   );
 };
 
-const ss_props: GetServerSideProps = async () => {
-  return { props: { other: "yes" } };
-};
+export const getServerSideProps: GetServerSideProps = async ({ res }) => {
+  const { cache_status, data } = await content_client.getBox();
 
-export const getServerSideProps = withPageBox({
-  box: "default",
-})(ss_props);
+  res.setHeader(FAABLE_CACHE_HEADER, cache_status);
+
+  return { props: { other: "yes", data } };
+};
 
 export default Page;

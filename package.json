@@ -2,20 +2,19 @@
   "name": "@faable/content-nextjs",
   "version": "0.0.0-develop",
   "license": "UNLICENSED",
+  "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
-  "module": "dist/index.mjs",
   "repository": "https://github.com/faablecloud/content-nextjs",
   "publishConfig": {
     "access": "public"
   },
   "scripts": {
-    "clean": "rimraf dist",
-    "prebuild": "yarn run clean",
+    "prebuild": "rimraf dist",
     "build": "tsc --project tsconfig.production.json",
     "pretest": "tsc",
     "test": "ava",
-    "prepack": "yarn build",
+    "prepack": "npm run build",
     "release": "semantic-release"
   },
   "devDependencies": {
@@ -41,9 +40,8 @@
     "react-dom": "^18.2.0"
   },
   "dependencies": {
-    "@faable/auth-helpers-axios": "^1.0.3",
+    "@faable/sdk-base": "^1.0.10",
     "@keyvhq/core": "^2.1.1",
-    "axios": "^1.7.2",
     "mdx-bundler": "^9.2.1"
   },
   "files": [

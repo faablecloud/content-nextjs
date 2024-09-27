@@ -1,17 +1,17 @@
-import { withPageContent } from "@faable/content-nextjs";
 import { GetServerSideProps } from "next";
 import Link from "next/link";
+import { content_client } from "../../lib/content";
 
 const Page = (props) => {
-  const { content, box, other } = props;
+  const { data, other } = props;
   return (
     <div>
       <h1>Content</h1>
       <div>
-        <b>Title:</b> {content.title}
+        <b>Title:</b> {data.title}
       </div>
       <div>
-        <b>Authors:</b> {content.authors.join(",")}
+        <b>Authors:</b> {data.authors.join(",")}
       </div>
 
       {/* <div>
@@ -33,10 +33,9 @@ const Page = (props) => {
   );
 };
 
-const ss_props: GetServerSideProps = async () => {
-  return { props: { other: "yes" } };
+export const getServerSideProps: GetServerSideProps = async ({ query }) => {
+  const { data } = await content_client.getContent(query.slug as string);
+  return { props: { other: "yes", data }, notFound: !data };
 };
-
-export const getServerSideProps = withPageContent({})(ss_props);
 
 export default Page;

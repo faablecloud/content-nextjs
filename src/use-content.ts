@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import { getMDXComponent } from "mdx-bundler/client";
-import { Content } from "./ContentApi";
+import { Content } from "./ContentApi.js";
 
 export const useContent = <T extends Content>(content: T) => {
   const Component = useMemo(() => {

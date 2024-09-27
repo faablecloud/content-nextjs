@@ -1,18 +1,10 @@
-import { AxiosInstance, AxiosResponse } from "axios";
-import { authorize } from "@faable/auth-helpers-axios";
-import axios from "axios";
-import { FaablePaginator } from "./paginator";
+import { ApiParams, FaableApi } from "@faable/sdk-base";
 
 export interface Content {
   id: string;
   status: "private" | "public";
   data: string;
 }
-
-const handleResponse = async <T>(prom: Promise<AxiosResponse<T>>) => {
-  const res = await prom;
-  return res.data;
-};
 
 export type ContentListQueryParams = {
   include_data?: boolean;
@@ -22,45 +14,29 @@ export type ContentListQueryParams = {
   categories?: string[];
 };
 
-interface ContentApiOptions {
-  client: AxiosInstance;
+type ContentApiOptions = {
   box: string;
-}
-export class ContentApi {
-  client: AxiosInstance;
-  paginator: FaablePaginator;
+} & ApiParams;
 
-  constructor(options: Partial<ContentApiOptions> = {}) {
-    // Set client
-    if (options.client) {
-      this.client = options.client;
-    } else {
-      this.client = authorize({
-        client: axios.create({ baseURL: "https://api-content.faable.link" }),
-      });
-    }
-
-    if (options.box) {
-      this.client.defaults.params = {
-        box: options.box,
-      };
-    }
-    this.paginator = new FaablePaginator(this.client);
+export class ContentApi extends FaableApi<ContentApiOptions> {
+  constructor(params: ContentApiOptions) {
+    super({
+      ...params,
+      baseURL: "https://api-content.faable.link",
+      fetcher: {
+        ...params?.fetcher,
+        params: {
+          box: params.box,
+        },
+      },
+    });
   }
 
-  list(params: ContentListQueryParams = {}) {
-    return this.paginator.paginate<Content>({ url: "/content", params });
+  list(params: ContentListQueryParams = { include_data: false }) {
+    return this.paginator<Content>({ url: "/content", params });
   }
 
-  get(slug_or_id: string, _params: { box?: string } = {}) {
-    const params = {
-      mode: "slug",
-      ..._params,
-    };
-    return handleResponse(
-      this.client.get<Content>(`/content/${slug_or_id}`, {
-        params,
-      })
-    );
+  getContent(slug_or_id: string, params?: { mode?: "slug" }) {
+    return this.fetcher.get<Content>(`/content/${slug_or_id}`, { params });
   }
 }
