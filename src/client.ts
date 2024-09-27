@@ -1,5 +1,9 @@
-import { createClientCredentials, FaableApiError } from "@faable/sdk-base";
-import { ContentApi, ContentListQueryParams } from "./ContentApi.js";
+import { FaableApiError } from "@faable/sdk-base";
+import {
+  ContentApi,
+  ContentApiOptions,
+  ContentListQueryParams,
+} from "./ContentApi.js";
 import Keyv from "@keyvhq/core";
 
 type CacheStatus = "hit" | "miss";
@@ -13,15 +17,14 @@ type ContentResponse = {
   cache_status: CacheStatus;
 };
 
-export const faableContentClient = (box: string = "default") => {
+export const faableContentClient = (params: ContentApiOptions) => {
   // Initialize api client
-  const auth = createClientCredentials();
-  const api = ContentApi.create({ auth, box });
+  const api = ContentApi.create(params);
 
   // TTL in production is 30 min and disabled in development
   const cache = new Keyv({
     ttl: 1000 * 60 * 30,
-    namespace: `faable-content-cache:${box}`,
+    namespace: `faable-content-cache:${params.box}`,
   });
 
   //Gets box in cache

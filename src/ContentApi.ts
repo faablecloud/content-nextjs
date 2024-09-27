@@ -14,7 +14,7 @@ export type ContentListQueryParams = {
   categories?: string[];
 };
 
-type ContentApiOptions = {
+export type ContentApiOptions = {
   box: string;
 } & ApiParams;
 
