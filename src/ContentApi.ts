@@ -15,7 +15,7 @@ export type ContentListQueryParams = {
 };
 
 export type ContentApiOptions = {
-  box: string;
+  box?: string;
 } & ApiParams;
 
 export class ContentApi extends FaableApi<ContentApiOptions> {
