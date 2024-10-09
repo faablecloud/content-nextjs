@@ -34,7 +34,7 @@ const Page = (props) => {
 };
 
 export const getServerSideProps: GetServerSideProps = async ({ res }) => {
-  const { cache_status, data } = await content_client.getBox();
+  const { cache_status, data } = await content_client.getBox("default");
 
   res.setHeader(FAABLE_CACHE_HEADER, cache_status);
 

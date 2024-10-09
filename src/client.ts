@@ -4,7 +4,8 @@ import {
   ContentApiOptions,
   ContentListQueryParams,
 } from "./ContentApi.js";
-import Keyv from "@keyvhq/core";
+import { createStore } from "./store/createStore.js";
+import { Store } from "./store/Store.js";
 
 type CacheStatus = "hit" | "miss";
 type BoxResponse = {
@@ -17,28 +18,35 @@ type ContentResponse = {
   cache_status: CacheStatus;
 };
 
-export const faableContentClient = (params: ContentApiOptions) => {
+type ContentClientOptions = {
+  api?: ContentApiOptions;
+  store?: Store;
+};
+
+export const faableContentClient = (config?: ContentClientOptions) => {
   // Initialize api client
-  const api = ContentApi.create(params);
+  const api = ContentApi.create(config?.api || {});
 
   // TTL in production is 30 min and disabled in development
-  const cache = new Keyv({
-    ttl: 1000 * 60 * 30,
-    namespace: `faable-content-cache:${params.box}`,
-  });
+  const cache = config?.store || createStore(config?.api?.box);
 
   //Gets box in cache
   const getBox = async (
+    box: string = "default",
     filter?: ContentListQueryParams & {
       cursor?: string;
       pageSize?: string;
     }
   ): Promise<BoxResponse> => {
-    const key = "box:" + JSON.stringify(filter);
+    const query = {
+      box,
+      ...filter,
+    };
+    const key = "box:" + JSON.stringify(query);
     let page = await cache.get(key);
     let cache_status: CacheStatus = "hit";
     if (!page) {
-      page = await api.list(filter).pass(filter);
+      page = await api.list(query).pass(query);
       await cache.set(key, page);
       cache_status = "miss";
     }
@@ -47,13 +55,20 @@ export const faableContentClient = (params: ContentApiOptions) => {
   };
 
   // Gets content in cache
-  const getContent = async (slug: string): Promise<ContentResponse> => {
-    const key = "slug:" + slug;
+  const getContent = async (params: {
+    slug: string | string[];
+    box?: string;
+  }): Promise<ContentResponse> => {
+    const slug = Array.isArray(params.slug) ? params.slug.join() : params.slug;
+    const key = ["content", params.box, slug].join(":");
     let data = await cache.get(key);
     let cache_status: CacheStatus = "hit";
     if (!data) {
       try {
-        const res = await api.getContent(slug, { mode: "slug" });
+        const res = await api.getContent(slug, {
+          mode: "slug",
+          box: params.box,
+        });
         await cache.set(key, { res });
         data = { res };
         cache_status = "miss";

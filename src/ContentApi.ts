@@ -6,13 +6,20 @@ export interface Content {
   data: string;
 }
 
+export type BoxParams = {
+  box?: string;
+};
+
 export type ContentListQueryParams = {
   include_data?: boolean;
-  box?: string;
   context_content_id?: string;
   status?: "public" | "private";
   categories?: string[];
-};
+} & BoxParams;
+
+export type GetContenQueryParams = {
+  mode?: "slug";
+} & BoxParams;
 
 export type ContentApiOptions = {
   box?: string;
@@ -36,7 +43,7 @@ export class ContentApi extends FaableApi<ContentApiOptions> {
     return this.paginator<Content>({ url: "/content", params });
   }
 
-  getContent(slug_or_id: string, params?: { mode?: "slug" }) {
+  getContent(slug_or_id: string, params?: GetContenQueryParams) {
     return this.fetcher.get<Content>(`/content/${slug_or_id}`, { params });
   }
 }

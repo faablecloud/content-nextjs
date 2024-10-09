@@ -1,8 +1,8 @@
 import test from "ava";
-import { ContentApi } from "./ContentApi";
+import { ContentApi } from "./ContentApi.js";
 
 test("box default", async (t) => {
-  const api = new ContentApi();
+  const api = ContentApi.create();
 
   const contents = await api.list().all();
 

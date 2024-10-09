@@ -3,7 +3,7 @@ import Link from "next/link";
 import { content_client } from "../../lib/content";
 
 const Page = (props) => {
-  const { data, other } = props;
+  const { data } = props;
   return (
     <div>
       <h1>Content</h1>
@@ -33,8 +33,10 @@ const Page = (props) => {
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async ({ query }) => {
-  const { data } = await content_client.getContent(query.slug as string);
+export const getServerSideProps: GetServerSideProps = async ({
+  query: { slug },
+}) => {
+  const { data } = await content_client.getContent({ slug });
   return { props: { other: "yes", data }, notFound: !data };
 };
 
